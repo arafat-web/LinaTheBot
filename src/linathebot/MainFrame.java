@@ -2,6 +2,7 @@
 Author: Arafat Hossain Ar
 Date: 09/12/2020
 Project Name: Lina The Talking Bot
+Version: 1.1
  */
 package linathebot;
 
