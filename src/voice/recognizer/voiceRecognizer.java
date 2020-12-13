@@ -1,8 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Author: Arafat Hossain Ar
+Date: 09/12/2020
+Project Name: Lina The Talking Bot
+Version: 1.1
  */
+
+//VERSION UPDATE
+
+/*
+Author: Arafat Hossain Ar
+Date: 12/12/2020
+Project Name: Lina The Talking Bot
+Version: 1.2
+ */
+
+//Voice Recognize
 package voice.recognizer;
 
 import com.sun.speech.freetts.Voice;
@@ -44,24 +56,29 @@ public class voiceRecognizer {
 
         //Configuration for voice detection
         Configuration configuration = new Configuration();
-        
+
         //Set the path
         configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
         configuration.setDictionaryPath("src/voice/rec/sources/3800.dic");
         configuration.setLanguageModelPath("src/voice/rec/sources/3800.lm");
-        
+
+       // configuration.setDictionaryPath("/Users/Arafat Hossain Ar/Documents/NetBeansProjects/LinaTheBot/src/voice/rec/sources/3800.dic");
+       // configuration.setLanguageModelPath("/Users/Arafat Hossain Ar/Documents/NetBeansProjects/LinaTheBot/src/voice/rec/sources/3800.lm");
 
         LiveSpeechRecognizer recognize = new LiveSpeechRecognizer(configuration);
         recognize.startRecognition(true);
-        
+
         //Robot object for controling pc
         Robot robot = new Robot();
-        
+
         //Voice result object
         SpeechResult speechResult;
         //new LinaVoice().setVisible(true);
 
-        System.setProperty("mbrola.base", "src/mbrola");
+          System.setProperty("mbrola.base", "src/mbrola");
+          
+        //System.setProperty("mbrola.base", "C:\\Users\\Arafat Hossain Ar\\Documents\\NetBeansProjects\\LinaTheBot\\src\\mbrola");
+     
         voicemanager = VoiceManager.getInstance();
 
         // Simply change to MBROLA voice
@@ -70,7 +87,7 @@ public class voiceRecognizer {
         // Allocate your chosen voice
         voice.allocate();
         voice.speak("Voice Control Activated!");
-                
+
         while ((speechResult = recognize.getResult()) != null) {
             String command = speechResult.getHypothesis();
             System.out.println("Input is: " + command);
@@ -111,10 +128,10 @@ public class voiceRecognizer {
                 voice.speak("I CAN EXECUTE YOUR COMMAND.");
             } //CAN YOU TELL ME A JOKE
             else if (command.contains("JOKE")) {
-                voice.speak("SORRY SIR! YOU DID'T TEACH ME THAT");
+                voice.speak("SORRY SIR! YOU DID NOT TEACH ME THAT.");
             } //OK TELL ME SOMETHING THAT I DO NOT KNOW
             else if (command.contains("SOMETHING")) {
-                voice.speak("YOU DIDN'T KNOW WHAT IS LOVE.");
+                voice.speak("YOU DON'T KNOW WHAT IS LOVE.");
             } //OK WHAT IS ARTIFICIAL INTELLIGENCE
             else if (command.contains("ARTIFICIAL INTELLIGENCE")) {
                 voice.speak("Artificial intelligence refers to the simulation of human intelligence in machines that are programmed to think like humans and mimic their actions. "
@@ -143,7 +160,7 @@ public class voiceRecognizer {
                         + "They can also include computers and sensors that monitor performance and plan movement, often called mechanical systems");
             } //WHAT TIME IS IT NOW
             else if (command.contains("TIME")) {
-                String ss = DateTimeFormatter.ofPattern("hh:mm a").format(LocalTime.now());
+                String ss = DateTimeFormatter.ofPattern("hh.mm a").format(LocalTime.now());
                 voice.speak("The time is: " + ss);
 
             } //TODAYS DATE
