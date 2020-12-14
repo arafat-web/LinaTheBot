@@ -89,6 +89,11 @@ public class LinaVoice extends javax.swing.JFrame {
         });
 
         helpBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/help.png"))); // NOI18N
+        helpBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helpBtnMouseClicked(evt);
+            }
+        });
 
         quitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/exit.png"))); // NOI18N
         quitBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -184,6 +189,11 @@ public class LinaVoice extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_quitBtnMouseClicked
+
+    private void helpBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helpBtnMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "All Right Reserved by Arafat Hossain\nFacebook: facebook.com/arafathossain000");
+    }//GEN-LAST:event_helpBtnMouseClicked
 
     /**
      * @throws java.io.IOException

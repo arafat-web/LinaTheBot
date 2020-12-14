@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import voice.recognizer.voiceRecognizer;
 
 /**
@@ -130,6 +131,11 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         infoBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/info.png"))); // NOI18N
+        infoBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                infoBtnMouseClicked(evt);
+            }
+        });
 
         voiceStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/microphone.png"))); // NOI18N
         voiceStart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -215,6 +221,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         helpBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/help.png"))); // NOI18N
+        helpBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helpBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);
         topBar.setLayout(topBarLayout);
@@ -392,6 +403,16 @@ public class MainFrame extends javax.swing.JFrame {
         // voiceRecognizer vr =   new voiceRecognizer().;
     }//GEN-LAST:event_quitBtnVoicePanelMouseClicked
 
+    private void helpBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helpBtnMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "All Right Reserved by Arafat Hossain\nFacebook: facebook.com/arafathossain000");
+    }//GEN-LAST:event_helpBtnMouseClicked
+
+    private void infoBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoBtnMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "All Right Reserved by Arafat Hossain\nFacebook: facebook.com/arafathossain000");
+    }//GEN-LAST:event_infoBtnMouseClicked
+
     /**
      * @param args the command line arguments
      * @throws java.lang.ClassNotFoundException
@@ -424,10 +445,8 @@ public class MainFrame extends javax.swing.JFrame {
 
   //      UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainFrame().setVisible(true);
         });
     }
 
@@ -450,6 +469,7 @@ public class MainFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     Thread thread1 = new Thread() {
+        @Override
         public void run() {
             new LinaVoice().setVisible(true);
         }
@@ -457,15 +477,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     //Thread to run to different window
     Thread thread2 = new Thread() {
+        @Override
         public void run() {
             voiceRecognizer vr = new voiceRecognizer();
             try {
                 vr.voiceDetect();
-            } catch (IOException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (AWTException ex) {
+            } catch (IOException | URISyntaxException | AWTException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
