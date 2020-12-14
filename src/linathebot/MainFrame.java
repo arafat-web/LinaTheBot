@@ -4,14 +4,29 @@ Date: 09/12/2020
 Project Name: Lina The Talking Bot
 Version: 1.1
  */
+
+//VERSION UPDATE
+
+/*
+Author: Arafat Hossain Ar
+Date: 12/12/2020
+Project Name: Lina The Talking Bot
+Version: 1.2
+ */
+
 package linathebot;
 
+import linathebotUI.LinaVoice;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.io.IOException;
-import javax.swing.*;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import voice.recognizer.voiceRecognizer;
 
 /**
  *
@@ -22,9 +37,13 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    //Voice control
+    
+    //Voice objects
+    VoiceManager voicemanager;
+    Voice voice;
+   
     private static final String voicename = "kevin16";
-    //private static final Gender FEMALE;
+    
 
     //Mouse position
     int xMouse;
@@ -32,6 +51,19 @@ public class MainFrame extends javax.swing.JFrame {
 
     public MainFrame() {
         initComponents();
+        
+        //Mbrola voice properties
+        System.setProperty("mbrola.base", "src/mbrola");
+        
+      //  System.setProperty("mbrola.base", "C:\\Users\\Arafat Hossain Ar\\Documents\\NetBeansProjects\\LinaTheBot\\src\\mbrola");
+        
+      voicemanager = VoiceManager.getInstance();
+
+        // Simply change to MBROLA voice
+        voice = voicemanager.getVoice("mbrola_us1");
+
+        // Allocate your chosen voice
+        voice.allocate();
 
     }
 
@@ -44,37 +76,37 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        mainPanel = new javax.swing.JPanel();
+        greetingText = new javax.swing.JLabel();
+        linaLogo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        infoBtn = new javax.swing.JLabel();
+        voiceStart = new javax.swing.JLabel();
+        settingsBtn = new javax.swing.JLabel();
+        quitBtnVoicePanel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        topBar = new javax.swing.JPanel();
+        quitBtn = new javax.swing.JLabel();
+        helpBtn = new javax.swing.JLabel();
         inputBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Lina The Bot");
         setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        mainPanel.setBackground(new java.awt.Color(255, 255, 255));
+        mainPanel.setForeground(new java.awt.Color(0, 0, 0));
+        mainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Bodoni MT", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Hi There! I'm Lina");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, -1, -1));
+        greetingText.setFont(new java.awt.Font("Bodoni MT", 1, 36)); // NOI18N
+        greetingText.setForeground(new java.awt.Color(0, 0, 0));
+        greetingText.setText("Hi There! I'm Lina");
+        mainPanel.add(greetingText, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, -1, -1));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/logo.png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, -1));
+        linaLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/logo.png"))); // NOI18N
+        mainPanel.add(linaLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -82,7 +114,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Control Panel");
+        jLabel3.setText("Voice Control Panel");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -91,20 +123,36 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addGap(212, 212, 212))
+                .addGap(180, 180, 180))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/info.png"))); // NOI18N
+        infoBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/info.png"))); // NOI18N
+        infoBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                infoBtnMouseClicked(evt);
+            }
+        });
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/microphone.png"))); // NOI18N
+        voiceStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/microphone.png"))); // NOI18N
+        voiceStart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        voiceStart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                voiceStartMouseClicked(evt);
+            }
+        });
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/settings.png"))); // NOI18N
+        settingsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/settings.png"))); // NOI18N
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/quit.png"))); // NOI18N
+        quitBtnVoicePanel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/quit.png"))); // NOI18N
+        quitBtnVoicePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                quitBtnVoicePanelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -113,13 +161,13 @@ public class MainFrame extends javax.swing.JFrame {
             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel6)
+                .addComponent(infoBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addComponent(jLabel7)
+                .addComponent(voiceStart)
                 .addGap(71, 71, 71)
-                .addComponent(jLabel8)
+                .addComponent(settingsBtn)
                 .addGap(59, 59, 59)
-                .addComponent(jLabel9)
+                .addComponent(quitBtnVoicePanel)
                 .addGap(52, 52, 52))
         );
         jPanel2Layout.setVerticalGroup(
@@ -128,14 +176,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
+                    .addComponent(infoBtn)
+                    .addComponent(voiceStart)
+                    .addComponent(settingsBtn)
+                    .addComponent(quitBtnVoicePanel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, -1, 110));
+        mainPanel.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, -1, 110));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -150,48 +198,53 @@ public class MainFrame extends javax.swing.JFrame {
             .addGap(0, 44, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(183, 318, -1, -1));
+        mainPanel.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(183, 318, -1, -1));
 
-        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel5.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel5.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        topBar.setBackground(new java.awt.Color(204, 204, 204));
+        topBar.setForeground(new java.awt.Color(0, 0, 0));
+        topBar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jPanel5MouseDragged(evt);
+                topBarMouseDragged(evt);
             }
         });
-        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+        topBar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel5MousePressed(evt);
+                topBarMousePressed(evt);
             }
         });
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/exit.png"))); // NOI18N
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        quitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/exit.png"))); // NOI18N
+        quitBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                quitBtnMouseClicked(evt);
             }
         });
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/help.png"))); // NOI18N
+        helpBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linathebot/logs/help.png"))); // NOI18N
+        helpBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helpBtnMouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);
+        topBar.setLayout(topBarLayout);
+        topBarLayout.setHorizontalGroup(
+            topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5)
+                .addComponent(helpBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
+                .addComponent(quitBtn)
                 .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        topBarLayout.setVerticalGroup(
+            topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(quitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+            .addComponent(helpBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 749, -1));
+        mainPanel.add(topBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 749, -1));
 
         inputBox.setBackground(new java.awt.Color(204, 204, 204));
         inputBox.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -202,17 +255,17 @@ public class MainFrame extends javax.swing.JFrame {
                 inputBoxActionPerformed(evt);
             }
         });
-        jPanel1.add(inputBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 310, 44));
+        mainPanel.add(inputBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 310, 44));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(749, 583));
@@ -221,18 +274,14 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void inputBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputBoxActionPerformed
         // TODO add your handling code here:
+        
+        //Get text from inputbox
         String getText = inputBox.getText().toLowerCase();
+        
+        //set text as null after taking input
         inputBox.setText("");
-        VoiceManager voicemanager;
-        Voice voice;
-        System.setProperty("mbrola.base", "C:/mbrola");
-        voicemanager = VoiceManager.getInstance();
-
-        // Simply change to MBROLA voice
-        voice = voicemanager.getVoice("mbrola_us1");
-
-        // Allocate your chosen voice
-        voice.allocate();
+        
+        //Greeting msges
         try {
             if (getText.contains("hi") || getText.contains("hello") || getText.contains("hola")) {
                 final int MAXNUM = 2;
@@ -274,7 +323,7 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (IOException ex) {
                 }
 
-            }else if (getText.contains("chrome")) {
+            } else if (getText.contains("chrome")) {
                 voice.speak("Opening chrome browser");
                 Robot robot = null;
                 try {
@@ -282,7 +331,7 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (AWTException ex) {
                 }
                 robot.delay(1000);
-                
+
                 try {
                     String command = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
                     Runtime run = Runtime.getRuntime();
@@ -292,8 +341,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             } else if (getText.contains("thank")) {
                 voice.speak("Welcome Sir!");
-            }
-            else {
+            } else {
                 final int MAXNUM = 3;
                 double getRandomNumber = Math.random();
                 int randomNumber = (int) (getRandomNumber * MAXNUM);
@@ -320,75 +368,124 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_inputBoxActionPerformed
 
-    private void jPanel5MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MousePressed
+    private void topBarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_topBarMousePressed
         // TODO add your handling code here:
+        
+        //mouse movement
         xMouse = evt.getX();
         yMouse = evt.getY();
-    }//GEN-LAST:event_jPanel5MousePressed
+    }//GEN-LAST:event_topBarMousePressed
 
-    private void jPanel5MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseDragged
+    private void topBarMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_topBarMouseDragged
         // TODO add your handling code here:
+        
+        //mouse movement control
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
         this.setLocation(x - xMouse, y - yMouse);
-    }//GEN-LAST:event_jPanel5MouseDragged
+    }//GEN-LAST:event_topBarMouseDragged
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void quitBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitBtnMouseClicked
         // TODO add your handling code here:
         System.exit(0);
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_quitBtnMouseClicked
+
+    private void voiceStartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_voiceStartMouseClicked
+
+        this.dispose();
+        thread1.start();
+        thread2.start();
+
+    }//GEN-LAST:event_voiceStartMouseClicked
+
+    private void quitBtnVoicePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitBtnVoicePanelMouseClicked
+        // TODO add your handling code here:
+        // voiceRecognizer vr =   new voiceRecognizer().;
+    }//GEN-LAST:event_quitBtnVoicePanelMouseClicked
+
+    private void helpBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helpBtnMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "All Right Reserved by Arafat Hossain\nFacebook: facebook.com/arafathossain000");
+    }//GEN-LAST:event_helpBtnMouseClicked
+
+    private void infoBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoBtnMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "All Right Reserved by Arafat Hossain\nFacebook: facebook.com/arafathossain000");
+    }//GEN-LAST:event_infoBtnMouseClicked
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.lang.InstantiationException
+     * @throws java.lang.IllegalAccessException
      */
-//    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//  //      UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new MainFrame().setVisible(true);
-//            }
-//        });
-//    }
+    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+  //      UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainFrame().setVisible(true);
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel greetingText;
+    private javax.swing.JLabel helpBtn;
+    private javax.swing.JLabel infoBtn;
     private javax.swing.JTextField inputBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel linaLogo;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JLabel quitBtn;
+    private javax.swing.JLabel quitBtnVoicePanel;
+    private javax.swing.JLabel settingsBtn;
+    private javax.swing.JPanel topBar;
+    private javax.swing.JLabel voiceStart;
     // End of variables declaration//GEN-END:variables
+
+    Thread thread1 = new Thread() {
+        @Override
+        public void run() {
+            new LinaVoice().setVisible(true);
+        }
+    };
+
+    //Thread to run to different window
+    Thread thread2 = new Thread() {
+        @Override
+        public void run() {
+            voiceRecognizer vr = new voiceRecognizer();
+            try {
+                vr.voiceDetect();
+            } catch (IOException | URISyntaxException | AWTException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    };
+
 }
